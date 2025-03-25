@@ -26,4 +26,14 @@ public class UserService : IUserService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<User> GetUser()
+    {
+        return await _dbContext.Users.OrderBy(u => u.Sessions.Count()).LastOrDefaultAsync();
+    }
+
+    public async Task<List<User>> GetUsers()
+    {
+        return await _dbContext.Users.Where(u => u.Sessions.Any(s=> s.DeviceType == Enums.DeviceType.Mobile)).ToListAsync();
+    }
 }
